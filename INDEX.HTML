@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Cotizaciones - Mi Botonera Digital SAS ZOMAC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Estilos CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff; /* Fondo blanco para un mejor contraste con el texto */
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 100%;
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+            background: #000; /* Fondo negro para la sección principal */
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2em;
+            color: #00ff26; /* Verde brillante para el título principal */
+        }
+        h2 {
+            font-size: 1.5em;
+            color: #00bcd4; /* Azul para los subtítulos */
+        }
+        .client-info, .quotation-summary, .products-services, .add-item-form {
+            background-color: #2c2c2c; /* Fondo gris oscuro para secciones */
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .client-info input, .add-item-form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #e0e0e0;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .client-info input:focus, .add-item-form input:focus {
+            background-color: #444; /* Cambiar color de fondo al enfocar */
+            box-shadow: 0 0 10px #00bcd4; /* Sombra azul al enfocar */
+        }
+        #search-bar {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 16px;
+        }
+        .products-services .item {
+            background-color: #383838; /* Fondo gris oscuro para cada producto */
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .products-services .item:hover {
+            transform: scale(1.02); /* Escalar al pasar el ratón */
+            box-shadow: 0 0 15px rgba(0, 255, 38, 0.3); /* Sombra verde */
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+        .item-header h3 {
+            font-size: 1.3em;
+            color: #00ff26;
+            margin: 0;
+            flex: 1 1 auto;
+        }
+        .select-button {
+            background-color: #00ff26; /* Botón verde */
+            color: #121212;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .select-button:hover {
+            background-color: #00cc20; /* Verde más oscuro al pasar el ratón */
+        }
+        .select-button.selected {
+            background-color: #ff5733; /* Botón naranja cuando está seleccionado */
+            color: #fff;
+        }
+        .accordion-content {
+            display: none; /* Oculto por defecto */
+            background-color: rgba(255, 255, 255, 0.05);
+            margin-top: 10px;
+            border-radius: 8px;
+            padding: 15px;
+            animation: fadeIn 0.3s ease-in-out; /* Animación de entrada */
+        }
+        .accordion-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #e0e0e0;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            text-align: left;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        .accordion-button:hover {
+            background: rgba(255, 255, 255, 0.2); /* Fondo más claro al pasar el ratón */
+        }
+        .accordion-panel {
+            display: none; /* Oculto por defecto */
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            margin-top: 5px;
+            padding: 15px;
+        }
+        .accordion-panel p {
+            margin: 0;
+            font-size: 14px;
+            text-align: justify;
+        }
+        .quotation-summary {
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .action-buttons {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .action-buttons button {
+            padding: 15px 25px;
+            margin: 10px;
+            background-color: #00bcd4; /* Botón azul */
+            color: #121212;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .action-buttons button:hover {
+            background-color: #0097a7; /* Azul más oscuro al pasar el ratón */
+            box-shadow: 0 0 15px #0097a7;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @media (max-width: 480px) {
+    body {
+        padding: 10px; /* Reducir el padding del cuerpo para maximizar el espacio disponible */
+    }
+    .container {
+        width: 100%; /* Usar el 100% del ancho de la pantalla */
+        padding: 10px; /* Reducir el padding del contenedor */
+    }
+    h1 {
+        font-size: 1.6em; /* Reducir aún más el tamaño del título principal */
+    }
+    h2 {
+        font-size: 1.3em; /* Reducir el tamaño de los subtítulos para pantallas pequeñas */
+    }
+    .item-header h3 {
+        font-size: 0.9em; /* Reducir el tamaño del encabezado de los elementos verdes para que se ajusten mejor */
+    }
+    .select-button {
+        font-size: 10px; /* Reducir el tamaño de la fuente del botón */
+        padding: 6px 10px; /* Reducir el relleno del botón */
+    }
+    .accordion-button {
+        font-size: 10px; /* Ajustar el tamaño de la fuente del acordeón para pantallas más pequeñas */
+        padding: 8px; /* Reducir el padding del botón del acordeón */
+    }
+    .action-buttons button {
+        font-size: 10px; /* Ajustar el tamaño de la fuente de los botones de acción */
+        padding: 8px 15px; /* Reducir el padding de los botones de acción */
+    }
+        /* Media query para pantallas de hasta 480px de ancho (móviles en modo vertical) */
+@media (max-width: 480px) {
+    body {
+        padding: 10px; /* Reducir el padding del cuerpo para maximizar el espacio disponible */
+    }
+    .container {
+        width: 100%; /* Usar el 100% del ancho de la pantalla */
+        padding: 10px; /* Reducir el padding del contenedor */
+    }
+    h1 {
+        font-size: 1.6em; /* Reducir aún más el tamaño del título principal */
+    }
+    h2 {
+        font-size: 1.3em; /* Reducir el tamaño de los subtítulos para pantallas pequeñas */
+    }
+    .item-header h3 {
+        font-size: 0.9em; /* Reducir el tamaño del encabezado de los elementos verdes para que se ajusten mejor */
+    }
+    .select-button {
+        font-size: 10px; /* Reducir el tamaño de la fuente del botón */
+        padding: 6px 10px; /* Reducir el relleno del botón */
+    }
+    .accordion-button {
+        font-size: 10px; /* Ajustar el tamaño de la fuente del acordeón para pantallas más pequeñas */
+        padding: 8px; /* Reducir el padding del botón del acordeón */
+    }
+    .action-buttons button {
+        font-size: 10px; /* Ajustar el tamaño de la fuente de los botones de acción */
+        padding: 8px 15px; /* Reducir el padding de los botones de acción */
+    }
+}
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <!-- Barra de Búsqueda -->
+    <input type="text" id="search-bar" placeholder="Buscar productos y servicios...">
+    <h3>Mi Botonera Digital SAS ZOMAC</h3>
+    <h1>Generador de Cotizaciones</h1>
+    <!-- Información del Cliente -->
+    <section class="client-info">
+        <h2>Información del Cliente</h2>
+        <form id="client-form">
+            <label for="client-name">Nombre:</label>
+            <input type="text" id="client-name" required>
+            <label for="client-email">Correo Electrónico:</label>
+            <input type="email" id="client-email" required>
+            <label for="client-phone">Teléfono:</label>
+            <input type="tel" id="client-phone" required>
+        </form>
+    </section>
+    <!-- Lista de Productos y Servicios -->
+    <section class="products-services">
+        <h2>Productos y Servicios</h2>
+        <!-- Productos y servicios se agregarán dinámicamente mediante JavaScript -->
+    </section>
+    <!-- Formulario para agregar nuevos productos -->
+    <section class="add-item-form">
+        <h2>Agregar Producto Externo</h2>
+        <form id="add-item-form">
+            <label for="item-name">Nombre del Producto:</label>
+            <input type="text" id="item-name" required>
+            <label for="item-tgs">TGS</label>
+            <input type="number" id="item-tgs" required>
+            <label for="item-price">Precio:</label>
+            <input type="number" id="item-price" required>
+            <button type="button" id="add-item-button">Agregar Producto</button>
+        </form>
+    </section>
+    <!-- Resumen de la Cotización -->
+    <section class="quotation-summary">
+        <h2>COTIZAR</h2>
+        <div id="summary-content"></div>
+        <p>CODIGO <span id="total-tgs">0</span> TGS</p>
+        <p>COSTO TOTAL: $<span id="total-cost">0</span></p>
+    </section>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Botones de Acción -->
+    <div class="action-buttons">
+        <button id="calculate-button">Calcular Cotización</button>
+        <button id="generate-pdf-button">Generar PDF</button>
+    </div>
+    <div>
+        <a href="https://www.mibotonera.com/terminosycondiciones" target="_blank">Consulta Términos y Condiciones</a>
+      </div>
+</div>
+<script>
+    // JavaScript functions to dynamically add products and calculate the quotation would go here
+</script>
+</body>
+</html>
+<script>
+    // Lista de productos y servicios disponibles
+    const products = [
+         // Botonera Digital Estándar
+        {
+            id: 1,
+            name: "Botonera Digital Estándar",
+            tgs: 540,
+            priceWithoutBotonera: 699000,
+            details: {
+                queEs: "La botonera digital es una herramienta que conecta todas las plataformas digitales de una empresa, como WhatsApp, Facebook e Instagram. Permite incluir catálogos de productos y enlaces a otras plataformas, funcionando como una página web o un espacio central para ventas y comunicación. Es práctico, económico y diseñado para cubrir todas las necesidades digitales de una empresa, sin complicaciones ni altos costos.",
+                paraQueSirve: "La Botonera Digital Estándar permite a tus clientes acceder de manera fácil y rápida a toda la información sobre tus servicios y productos, tus redes sociales y cualquier otra información importante de tu negocio desde un solo enlace. Es una herramienta sencilla que centraliza todo lo que tus clientes necesitan saber, ayudándoles a conocer mejor tu empresa y facilitando la comunicación contigo sin complicaciones",
+                porQueLoNecesita: "La necesitas si quieres mejorar la comunicación con tus clientes y ofrecerles una manera fácil y rápida de encontrar toda la información de tu negocio, como tus productos, servicios y redes sociales, sin complicarte con una página web compleja. Es una solución sencilla que organiza todo en un solo enlace, ayudando a que tu empresa se vea más profesional y accesible para tus clientes.",
+                cuantoCuesta: "El precio de la Botonera Digital Estándar es $699.000 COP.",
+                queIncluye: "La Botonera Digital Estándar incluye por 1 año: 1 Código QR Alfanumérico: Sin marcas de agua, ideal para compartir y optimizar la publicidad de tu negocio. Diseño Personalizado: Adaptado a la línea gráfica y/o manual de marca suministrado por el cliente o creado de acuerdo a la información suministrada, aprobados por uno de nuestros diseñadores expertos. Hasta 7 Botones Personalizados: Diseñados según la línea gráfica del cliente o sugerencias aprobadas por nuestros diseñadores. Entre estos botones, el cliente puede elegir: Botón de Redireccionamiento a WhatsApp: Para contacto rápido con clientes. Botón de Redireccionamiento a Catálogo de WhatsApp u Otros Catálogos: Según el enlace proporcionado por el cliente. Botón de Canal de Novedades (Opcional): Según el enlace proporcionado por el cliente. Botones que Redirigen a Redes Sociales: Como Facebook, Instagram, TikTok, YouTube, LinkedIn, Twitter (X), y otras plataformas. Botón de Calificaciones de la Propiedad Digital de Google: Requiere enlace de calificaciones si el cliente cuenta con propiedad digital. Mapa GPS: Muestra la dirección de tu negocio o empresa; opcional según especificaciones de edición del cliente. Texto con Descripción de la Empresa: Incluye hasta 3 textos como lema, misión, visión o información puntual. SEO Básico: Optimización básica para mejorar la visibilidad de la botonera en internet. Certificado SSL: Hace que el sitio sea visible en todos los dispositivos en modo seguro y asegura la protección y confianza en la navegación del sitio web para sus clientes. Soporte Técnico por 1 Año: Asistencia continua para garantizar el correcto funcionamiento de la botonera. Este paquete está diseñado para ofrecer una solución completa, personalizada y segura para potenciar la presencia digital de tu negocio.",
+                queSeNecesita: (``),
+                terminosYCondiciones: "Incluye hasta 1 revisión.",
+                queGarantiza: "Funcionamiento correcto y diseño atractivo.",
+                porQueRenovar: "No aplica renovación anual."
+            }
+        },
+        // Botonera Digital Premium
+        {
+            id: 2,
+            name: "Botonera Digital Premium",
+            tgs: 600,
+            priceWithoutBotonera: 799000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Botonera Digital Enterprise
+        {
+            id: 3,
+            name: "Botonera Digital Enterprise",
+            tgs: 900,
+            priceWithoutBotonera: 1200000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (``),
+                porQueRenovar: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            }
+        },
+        // Página Adicional en Botonera Digital
+        {
+            id: 4,
+            name: "Página Adicional Botonera Digital",
+            tgs: 120,
+            priceWithoutBotonera: 154000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            }
+        },
+        // Código QR Alfanumérico
+        {
+            id: 5,
+            name: "Código QR Alfanumérico",
+            tgs: 30,
+            priceWithoutBotonera: 42900,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Creación de Logotipo
+        {
+            id: 6,
+            name: "Creación de Logotipo",
+            tgs: 90,
+            priceWithoutBotonera: 116000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Portada de WhatsApp
+        {
+            id: 7,
+            name: "Portada de WhatsApp",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Intro de Logotipo Animado
+        {
+            id: 8,
+            name: "Intro de Logotipo Animado",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Intro de Logo 1x1
+        {
+            id: 9,
+            name: "Intro de Logo 1x1",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Portada de Facebook
+        {
+            id: 10,
+            name: "Portada de Facebook",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Intro de Logo 1080 x 720
+        {
+            id: 11,
+            name: "Intro de Logo 1080 x 720",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),     
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Carrusel para Instagram
+        {
+            id: 12,
+            name: "Carrusel para Instagram",
+            tgs: 90,
+            priceWithoutBotonera: 116000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Reel Instagram 30 segundos
+        {
+            id: 13,
+            name: "Reel Instagram 30 segundos",
+            tgs: 90,
+            priceWithoutBotonera: 116000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Feed de Instagram 9 partes
+        {
+            id: 14,
+            name: "Feed de Instagram 9 partes",
+            tgs: 90,
+            priceWithoutBotonera: 116000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Historia para Instagram 30 segundos
+        {
+            id: 15,
+            name: "Historia Instagram 30 segundos",
+            tgs: 30,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Iconos para Historias Destacadas
+        {
+            id: 16,
+            name: "Iconos para Historias Destacadas",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Post
+        {
+            id: 17,
+            name: "Post",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Flyer Sencillo
+        {
+            id: 18,
+            name: "Flyer Sencillo",
+            tgs: 30,
+            priceWithoutBotonera: 35000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // 2 flyers Sencillos
+        {
+            id: 19,
+            name: " 2 flyers Sencillos",
+            tgs: 45,
+            priceWithoutBotonera: 60000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // 5 flyers Sencillos
+        {
+            id: 20,
+            name: " 5 flyers Sencillos",
+            tgs: 60,
+            priceWithoutBotonera: 100000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // 10 flyers Sencillos
+        {
+            id: 21,
+            name: "10 flyers Sencillos",
+            tgs: 120,
+            priceWithoutBotonera: 160000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Flyer Avanzado
+        {
+            id: 22,
+            name: "Flyer Avanzado",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // 2 Flyers Avanzados
+        {
+            id: 23,
+            name: "2 Flyers Avanzados",
+            tgs: 120,
+            priceWithoutBotonera: 140000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // 5 Flyers Avanzados
+        {
+            id: 24,
+            name: "5 Flyers Avanzados",
+            tgs: 250,
+            priceWithoutBotonera: 250000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // 10 Flyers Avanzados
+        {
+            id: 25,
+            name: "10 Flyers Avanzados",
+            tgs: 380,
+            priceWithoutBotonera: 400000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Banner
+        {
+            id: 26,
+            name: "Banner ",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Creación Propiedad Digital Google
+        {
+            id: 27,
+            name: "Creación Propiedad Digital Google",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Catálogo de Máximo 15 Productos
+        {
+            id: 28,
+            name: "Catálogo de Máximo 15 Productos",
+            tgs: 270,
+            priceWithoutBotonera: 346000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Catálogo de Máximo 25 Productos
+        {
+            id: 29,
+            name: "Catálogo de Máximo 25 Productos",
+            tgs: 370,
+            priceWithoutBotonera: 480000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+             
+            }
+        },
+        // Catálogo de Máximo 50 Productos
+        {
+            id: 30,
+            name: "Catálogo de Máximo 50 Productos",
+            tgs: 620,
+            priceWithoutBotonera: 793000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Catálogo de Máximo 100 Productos
+        {
+            id: 31,
+            name: "Catálogo de Máximo 100 Productos",
+            tgs: 1120,
+            priceWithoutBotonera: 1432000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Producto Adicional para Catálogo
+        {
+            id: 32,
+            name: "Producto Adicional para Catálogo",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+             
+            }
+        },
+        // Extensión Gráfica para Catálogo
+        {
+            id: 33,
+            name: "Extensión Gráfica para Catálogo",
+            tgs: 90,
+            priceWithoutBotonera: 116000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Tarjeta Virtual
+        {
+            id: 34,
+            name: "Tarjeta Virtual",
+            tgs: 120,
+            priceWithoutBotonera: 145000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Diseño de Logo 3D
+        {
+            id: 35,
+            name: "Diseño de Logo 3D",
+            tgs: 120,
+            priceWithoutBotonera: 154000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Diseño de Producto 3D con plantilla
+        {
+            id: 36,
+            name: "Diseño de Producto 3D con plantilla",
+            tgs: 120,
+            priceWithoutBotonera: 154000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Diseño de Producto 3D sin plantilla
+        {
+            id: 37,
+            name: "Diseño de Producto 3D sin plantilla",
+            tgs: 200,
+            priceWithoutBotonera: 310000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Diseño para Tarjeta de Publicidad
+        {
+            id: 38,
+            name: "Diseño para Tarjeta de Publicidad",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Diseño para Volante Publicitario
+        {
+            id: 39,
+            name: "Diseño para Volante Publicitario",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+          
+            }
+        },
+        // Sitio Web Estático
+        {
+            id: 40,
+            name: "Sitio Web Estático",
+            tgs: 120,
+            priceWithoutBotonera: 154000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Diseño de Carnet Virtual
+        {
+            id: 41,
+            name: "Diseño de Carnet Virtual",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+             
+            }
+        },
+        // Carnet Virtual Adicional
+        {
+            id: 42,
+            name: "Carnet Virtual Adicional ",
+            tgs: 20,
+            priceWithoutBotonera: 26000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            
+            }
+        },
+        // Reclamación Propiedad Google
+        {
+            id: 43,
+            name: "Reclamación Propiedad Google",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+             
+            }
+        },
+        // Transferencia Propiedad Google
+        {
+            id: 44,
+            name: "Transferencia Propiedad Google",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (`La Transferencia de Propiedad Digital de Google es un servicio que te ayuda a transferir la administración de tu perfil de Google My Business de una cuenta a otra. Esto es útil cuando hay un cambio de propietario o administrador en la empresa.
+`),
+                paraQueSirve: (`Sirve para garantizar que el nuevo propietario o administrador de la cuenta tenga control total sobre el perfil de Google My Business. Esto asegura que podrán gestionar la información del negocio, responder a reseñas y mantener la propiedad digital activa.
+`),
+                porQueLoNecesita: (`Lo necesitas si deseas transferir la gestión de tu perfil de Google My Business a otra persona, por ejemplo, en caso de cambio de administración, venta del negocio o cambio de responsables de la cuenta.`),
+                cuantoCuesta: (`$ 77.000`),
+                queIncluye: (` Proceso completo de transferencia de la propiedad del perfil de Google My Business a otra cuenta.
+- Verificación y confirmación de que el nuevo propietario tiene control total sobre el perfil.
+- Asistencia para garantizar que los accesos sean seguros y correctos después de la transferencia.
+- Verificación de que toda la información del perfil esté intacta después de la transferencia.`),
+                queSeNecesita: (`- Accede a la cuenta actual de Google My Business.
+- La cuenta de Google del nuevo propietario o administrador.
+- Documentos de verificación de la propiedad, si es necesario.`),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            }
+        },
+        // Optimización Propiedad Google
+        {
+            id: 45,
+            name: "Optimización Propiedad Google",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            
+            }
+        },
+        // Instalación Botonera Digital Google
+        {
+            id: 46,
+            name: "Instalación Botonera Digital Google",
+            tgs: 30,
+            priceWithoutBotonera: 39000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Enlazar Redes Sociales a Google
+        {
+            id: 47,
+            name: "Enlazar Redes Sociales a Google",
+            tgs: 30,
+            priceWithoutBotonera: 39000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Configuración Profesional Facebook
+        {
+            id: 48,
+            name: "Configuración Facebook PRO",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Configuración Profesional Instagram
+        {
+            id: 49,
+            name: "Configuración Instagram PRO",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Configuración Profesional WhatsApp
+        {
+            id: 50,
+            name: "Configuración WhatsApp PRO",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Configuración Meta Business Suite
+        {
+            id: 51,
+            name: "Configuración Meta Business Suite",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Configuración Profesional de X
+        {
+            id: 52,
+            name: "Configuración Profesional de X",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+             
+            }
+        },
+        // Configuración Profesional de TikTok
+        {
+            id: 53,
+            name: "Configuración TikTok PRO",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Configuración Profesional LinkedIn
+        {
+            id: 54,
+            name: "Configuración Profesional LinkedIn",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+               
+            }
+        },
+        // Configuración Profesional YouTube
+        {
+            id: 55,
+            name: "Configuración Profesional YouTube",
+            tgs: 330,
+            priceWithoutBotonera: 422000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+             
+            }
+        },
+        // Automáticas Meta Business
+        {
+            id: 56,
+            name: "Automáticas Meta Business",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Respuestas Automáticas WhatsApp
+        {
+            id: 57,
+            name: "Respuestas Automáticas WhatsApp",
+            tgs: 45,
+            priceWithoutBotonera: 58000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Público Objetivo de Facebook
+        {
+            id: 58,
+            name: "Público Objetivo de Facebook",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Asesorías Uso de la Botonera Digital
+        {
+            id: 59,
+            name: "Asesorías Uso Botonera Digital",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Asesorías Uso de Facebook
+        {
+            id: 60,
+            name: "Asesorías Uso de Facebook",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Asesorías Uso de Instagram
+        {
+            id: 61,
+            name: "Asesorías Uso de Instagram",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Asesorías WhatsApp Business
+        {
+            id: 62,
+            name: "Asesorías WhatsApp Business",
+            tgs: 60,
+            priceWithoutBotonera: 42900,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+              
+            }
+        },
+        // Asesorías Google Empresas
+        {
+            id: 63,
+            name: "Asesorías Google Empresas",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+                
+            }
+        },
+        // Asesorías Públicos Objetivos
+        {
+            id: 64,
+            name: "Asesorías Públicos Objetivos",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            }
+        },
+        // Asesorías Gestión de Contenido
+        {
+            id: 65,
+            name: "Asesorías Gestión de Contenido",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            }
+        },
+        // Asesorías Optimización Publicidades
+        {
+            id: 66,
+            name: "Asesorías Optimización Publicidades",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),
+            }
+        },
+        // Asesorías Mejora Diseño de Empresa
+        {
+            id: 67,
+            name: "Asesorías Mejora Diseño Empresa",
+            tgs: 60,
+            priceWithoutBotonera: 77000,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                porQueRenovar: (``),
+                queGarantiza: (`Mi Botonera Digital se compromete a brindarte un servicio profesional, cumpliendo con los estándares de calidad y atención a cada proyecto. Aseguramos que trabajaremos en tu proyecto con dedicación y mantendremos comunicación clara en todo el proceso, buscando siempre la mejor solución para tu negocio.`),  
+            }
+        },
+    ];
+
+    // Configura los escuchadores de eventos para los botones y la barra de búsqueda
+    function setupEventListeners() {
+        document.getElementById('calculate-button').addEventListener('click', calculateQuotation);
+        document.getElementById('generate-pdf-button').addEventListener('click', generatePDF);
+
+        // Agregar evento para la barra de búsqueda
+        document.getElementById('search-bar').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase(); // Convertir el término de búsqueda a minúsculas
+            const filteredProducts = products.filter(product =>
+                product.name.toLowerCase().includes(searchTerm) // Filtrar productos cuyo nombre contenga el término de búsqueda
+            );
+            displayProducts(filteredProducts); // Mostrar los productos filtrados
+        });
+    }
+
+    // Variables globales
+    let selectedProducts = [];
+    let totalTgs = 0;
+    let totalCost = 0;
+
+    // Inicializa la página
+    function init() {
+        displayProducts(products);
+        setupEventListeners();
+    }
+
+    // Muestra los productos y servicios en la página
+    function displayProducts(productList) {
+        const container = document.querySelector('.products-services');
+        container.innerHTML = '';
+        productList.forEach(product => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('item');
+
+            const itemHeader = document.createElement('div');
+            itemHeader.classList.add('item-header');
+            const h3 = document.createElement('h3');
+            h3.textContent = product.name;
+            h3.addEventListener('click', () => {
+                const accordionContent = itemDiv.querySelector('.accordion-content');
+                accordionContent.style.display = accordionContent.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Botón para seleccionar o deseleccionar el producto
+            const selectButton = document.createElement('button');
+            selectButton.classList.add('select-button');
+            selectButton.dataset.id = product.id;
+            selectButton.textContent = 'Seleccionar';
+            selectButton.addEventListener('click', () => toggleSelection(selectButton, product));
+
+            itemHeader.appendChild(h3);
+            itemHeader.appendChild(selectButton);
+
+            // Crear acordeón con detalles del producto
+            const accordionContent = createAccordion(product);
+
+            itemDiv.appendChild(itemHeader);
+            itemDiv.appendChild(accordionContent);
+
+            container.appendChild(itemDiv);
+        });
+    }
+
+    // Crea el acordeón con preguntas frecuentes sobre el producto
+    function createAccordion(product) {
+        const accordionContent = document.createElement('div');
+        accordionContent.classList.add('accordion-content');
+        const questions = [
+            "¿Qué es?",
+            "¿Para qué sirve?",
+            "¿Por qué lo necesita?",
+            "¿Cuánto cuesta?",
+            "¿Qué incluye?",
+            "Requerimientos Elaboración",
+            "Satisfacción Garantiazada",
+        ];
+        const answers = [
+            product.details.queEs,
+            product.details.paraQueSirve,
+            product.details.porQueLoNecesita,
+            product.details.cuantoCuesta,
+            product.details.queIncluye,
+            product.details.queSeNecesita,
+            product.details.terminosYCondiciones,
+            product.details.queGarantiza,
+            product.details.porQueRenovar
+        ];
+
+        // Añadir cada pregunta y respuesta al acordeón
+        questions.forEach((question, index) => {
+            const accordionItem = document.createElement('div');
+            accordionItem.classList.add('accordion-item');
+
+            const button = document.createElement('button');
+            button.classList.add('accordion-button');
+            button.textContent = question;
+            button.addEventListener('click', () => {
+                const panel = button.nextElementSibling;
+                // Alternar visibilidad del panel
+                panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+            });
+
+            const panel = document.createElement('div');
+            panel.classList.add('accordion-panel');
+            const p = document.createElement('p');
+            p.textContent = answers[index];
+            panel.appendChild(p);
+
+            accordionItem.appendChild(button);
+            accordionItem.appendChild(panel);
+            accordionContent.appendChild(accordionItem);
+        });
+        return accordionContent;
+    }
+
+    // Alterna la selección de un producto
+    function toggleSelection(button, product) {
+        const productId = parseInt(button.dataset.id);
+        if (button.classList.contains('selected')) {
+            // Quitar selección del producto
+            button.classList.remove('selected');
+            button.textContent = 'Seleccionar';
+            selectedProducts = selectedProducts.filter(p => p.id !== productId);
+        } else {
+            // Agregar producto a la selección
+            button.classList.add('selected');
+            button.textContent = 'Seleccionado';
+            selectedProducts.push(product);
+        }
+        // Actualizar el resumen de la cotización
+        updateSummary();
+    }
+
+    // Calcula la cotización basada en los productos seleccionados
+    function calculateQuotation() {
+        totalTgs = 0;
+        totalCost = 0;
+        selectedProducts.forEach(product => {
+            totalTgs += product.tgs;
+            totalCost += product.priceWithoutBotonera;
+        });
+        document.getElementById('total-tgs').textContent = totalTgs;
+        document.getElementById('total-cost').textContent = totalCost;
+    }
+
+    // Genera un archivo PDF con los detalles de la cotización
+    function generatePDF() {
+        if (totalCost === 0) {
+            alert('Por favor, calcule la cotización antes de generar el PDF.');
+            return;
+        }
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Añadir membrete
+        doc.setFontSize(20);
+        doc.text("Mi Botonera Digital SAS ZOMAC", 10, 10);
+        doc.setFontSize(14);
+        doc.text("Generador de Cotizaciones", 10, 20);
+        doc.setLineWidth(0.5);
+        doc.line(10, 25, 200, 25);
+
+        // Añadir información básica al PDF
+        doc.setFontSize(12);
+        doc.text("Nombre del Cliente: " + document.getElementById('client-name').value, 10, 40);
+        doc.text("Correo Electrónico: " + document.getElementById('client-email').value, 10, 50);
+        doc.text("Teléfono: " + document.getElementById('client-phone').value, 10, 60);
+        doc.text("COTIZACIÓN  " + totalTgs + " TGS", 10, 70);
+        doc.text("Costo total $" + totalCost, 10, 80);
+
+        // Añadir detalles de productos seleccionados
+        let y = 90;
+        doc.text("Productos Seleccionados:", 10, y);
+        y += 10;
+        selectedProducts.forEach(product => {
+            doc.text(`- ${product.name} ${product.tgs}       $${product.priceWithoutBotonera}`, 10, y);
+            y += 10;
+        });
+
+        // Guardar el archivo PDF con el nombre especificado
+        doc.save("cotizacion_membreteada.pdf");
+    }
+
+    // Actualiza el resumen de la cotización en la interfaz de usuario
+    function updateSummary() {
+        const summaryContent = document.getElementById('summary-content');
+        summaryContent.innerHTML = '';
+        selectedProducts.forEach(product => {
+            const div = document.createElement('div');
+            div.textContent = `${product.name} - ${product.tgs} - $${product.priceWithoutBotonera}`;
+            summaryContent.appendChild(div);
+        });
+        document.getElementById('total-tgs').textContent = totalTgs;
+        document.getElementById('total-cost').textContent = totalCost;
+    }
+    // Añadir un nuevo producto o servicio
+    function addItem() {
+        const itemName = document.getElementById('item-name').value;
+        const itemTgs = parseInt(document.getElementById('item-tgs').value);
+        const itemPrice = parseInt(document.getElementById('item-price').value);
+
+        const newItem = {
+            id: products.length + 1,
+            name: itemName,
+            tgs: itemTgs,
+            priceWithoutBotonera: itemPrice,
+            details: {
+                queEs: (``),
+                paraQueSirve: (``),
+                porQueLoNecesita: (``),
+                cuantoCuesta: (``),
+                queIncluye: (``),
+                queSeNecesita: (``),
+                terminosYCondiciones: (``),
+                queGarantiza: (``),
+                porQueRenovar: (``),
+            }
+        };
+
+        products.push(newItem);
+        displayProducts(products);
+        document.getElementById('add-item-form').reset();
+    }
+
+    // Llama a la función para inicializar la página
+    init();
+</script>
+</body>
+</html>
